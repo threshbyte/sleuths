@@ -1,18 +1,13 @@
-target/
-out/
-sources.txt
-*.class
-*.jar
-!.mvn/wrapper/*.jar
+# Node
+node_modules/
+dist/
+*.log
 
 # IDE
 .idea/
 *.iml
 *.iws
 .vscode/
-.settings/
-.project
-.classpath
 
 # OS
 .DS_Store

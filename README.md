@@ -1,15 +1,46 @@
-# sleuths
+# sleuths-mcp
 
 > A production-troubleshooting MCP server for AI agents. Turns thread dumps, GC logs and heap histograms into **deterministic** structured diagnostics (deadlocks, hot locks, bottleneck frames), so Cursor / Claude / Copilot pinpoint the problem directly — instead of hallucinating from raw logs.
 
 English | [中文](./README_ZH.md)
+
+## Install
+
+Requires Node.js 18+. No global install needed — run directly with `npx`:
+
+```bash
+npx -y sleuths-mcp
+```
+
+Or install globally:
+
+```bash
+npm install -g sleuths-mcp
+```
+
+## Setup with your AI client
+
+Add sleuths to your MCP client (Cursor / Claude / Copilot):
+
+```json
+{
+  "mcpServers": {
+    "sleuths": {
+      "command": "npx",
+      "args": ["-y", "sleuths-mcp"]
+    }
+  }
+}
+```
+
+Then just say: "analyze this thread dump".
 
 ## Features
 
 - **Deterministic parsing**: no LLM hallucination; reproducible and testable
 - **Standard MCP protocol**: STDIO transport, works with Cursor / Claude / Copilot
 - **Zero intrusion**: only parses existing diagnostic artifacts; never attaches to your app
-- **Focused on production troubleshooting**: deadlocks, lock contention, memory pressure
+- **One-command install**: `npx -y sleuths-mcp`, no Java runtime required
 
 ## Tools
 
@@ -20,9 +51,13 @@ English | [中文](./README_ZH.md)
 | `analyze_heap_histo` | Heap histogram: top classes, suspected leaks | 🚧 planned |
 | `parse_exception_log` | Aggregated exceptions, root-cause chain | 🚧 planned |
 
-## Setup
+## Develop
 
-Add sleuths to your AI client (Cursor / Claude / Copilot) as a standard MCP server, then just say: "analyze this thread dump".
+```bash
+npm install
+npm run build
+node dist/index.js
+```
 
 ## License
 
