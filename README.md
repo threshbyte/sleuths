@@ -47,9 +47,9 @@ Then just say: "analyze this thread dump".
 | Tool | Description | Status |
 |------|-------------|--------|
 | `analyze_thread_dump` | Thread dumps: deadlocks, state distribution, hot locks, top frames | ✅ MVP |
-| `analyze_gc_log` | GC logs: Full GC frequency, memory pressure, pauses | 🚧 planned |
-| `analyze_heap_histo` | Heap histogram: top classes, suspected leaks | 🚧 planned |
-| `parse_exception_log` | Aggregated exceptions, root-cause chain | 🚧 planned |
+| `parse_exception_log` | Exception aggregation: group by type, root-cause chain, count | ✅ MVP |
+| `analyze_gc_log` | GC logs: Young/Full counts, avg/max pause, memory trend | ✅ MVP |
+| `analyze_heap_histo` | Heap histogram: top classes by bytes, suspected leaks | ✅ MVP |
 
 ## Develop
 

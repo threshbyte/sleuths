@@ -47,9 +47,9 @@ npm install -g sleuths-mcp
 | Tool | 说明 | 状态 |
 |------|------|------|
 | `analyze_thread_dump` | 线程 dump:死锁、状态分布、热点锁、Top 栈帧 | ✅ MVP |
-| `analyze_gc_log` | GC 日志:Full GC 频率、内存压力、停顿 | 🚧 计划 |
-| `analyze_heap_histo` | 堆直方图:Top 占用类、疑似泄漏 | 🚧 计划 |
-| `parse_exception_log` | 异常日志聚合、根因链 | 🚧 计划 |
+| `parse_exception_log` | 异常日志聚合:按类型分组、根因链、出现次数 | ✅ MVP |
+| `analyze_gc_log` | GC 日志:Young/Full 次数、平均/最大停顿、内存趋势 | ✅ MVP |
+| `analyze_heap_histo` | 堆直方图:按字节 Top 类、疑似内存泄漏 | ✅ MVP |
 
 ## 本地开发
 
