@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sleuths — deterministic troubleshooting for AI agents</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0e14;
+    color: #c9d1d9;
+    font-family: 'SF Mono', 'Fira Code', Menlo, monospace;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  pre.ascii {
+    color: #00e676;
+    font-size: 12px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .tagline { color: #8b949e; font-size: 15px; margin-bottom: 32px; }
+  .terminal {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .terminal-header {
+    background: #21262d;
+    padding: 10px 16px;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #ff5f56; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #27c93f; }
+  .terminal-title { margin-left: 12px; color: #8b949e; font-size: 13px; }
+  .terminal-body { padding: 20px; font-size: 14px; }
+  .terminal-body div { margin-bottom: 4px; }
+  .prompt { color: #8b949e; }
+  .cmd { color: #00e676; }
+  .dim { color: #8b949e; }
+  .blue { color: #58a6ff; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .card { padding: 20px; border-radius: 8px; background: #161b22; }
+  .card-bad { border: 1px solid #f8514933; }
+  .card-good { border: 1px solid #00e67633; }
+  .card h3 { margin-bottom: 12px; font-size: 14px; }
+  .card-bad h3 { color: #f85149; }
+  .card-good h3 { color: #00e676; }
+  .card p { font-size: 13px; color: #8b949e; }
+  .verdict { margin-top: 12px; font-size: 12px; }
+  .card-bad .verdict { color: #f85149; }
+  .card-good .verdict { color: #00e676; }
+  .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .tool {
+    background: #161b22;
+    padding: 16px;
+    border-radius: 4px;
+    border-left: 3px solid;
+  }
+  .tool h4 { font-size: 13px; margin-bottom: 6px; }
+  .tool p { font-size: 12px; color: #8b949e; }
+  .c1 { border-color: #00e676; } .c1 h4 { color: #00e676; }
+  .c2 { border-color: #58a6ff; } .c2 h4 { color: #58a6ff; }
+  .c3 { border-color: #d2a8ff; } .c3 h4 { color: #d2a8ff; }
+  .c4 { border-color: #ffa657; } .c4 h4 { color: #ffa657; }
+  .config {
+    text-align: center;
+    padding: 24px;
+    background: #161b22;
+    border: 1px dashed #30363d;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+  .config p { color: #8b949e; font-size: 14px; margin-bottom: 12px; }
+  .config pre {
+    background: #0d1117;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    text-align: left;
+    overflow-x: auto;
+  }
+  footer { text-align: center; font-size: 12px; color: #484f58; }
+  footer a { color: #58a6ff; text-decoration: none; margin: 0 8px; }
+  @media (max-width: 640px) {
+    .compare { grid-template-columns: 1fr; }
+    pre.ascii { font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <pre class="ASCII">
+   ███████╗██╗     ███████╗██╗   ██╗████████╗██╗  ██╗███████╗██████╗ ████████╗
+   ██╔════╝██║     ██╔════╝██║   ██║╚══██╔══╝██║  ██║██╔════╝██╔══██╗╚══██╔══╝
+   ███████╗██║     █████╗  ██║   ██║   ██║   ███████║█████╗  ██████╔╝   ██║
+   ╚════██║██║     ██╔══╝  ██║   ██║   ██║   ██╔══██║██╔══╝  ██╔══██╗   ██║
+   ███████║███████╗███████╗╚██████╔╝   ██║   ██║  ██║███████╗██║  ██║   ██║
+   ╚══════╝╚══════╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝</pre>
+
+  <p class="tagline">deterministic production troubleshooting for AI agents · no LLM hallucination</p>
+
+  <div class="terminal">
+    <div class="terminal-header">
+      <span class="dot dot-r"></span>
+      <span class="dot dot-y"></span>
+      <span class="dot dot-g"></span>
+      <span class="terminal-title">$ npx -y sleuths-mcp</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="prompt">❯</span> <span class="cmd">sleuths-mcp</span> v0.1.0</div>
+      <div class="dim">  loaded 4 tools: analyze_thread_dump · parse_exception_log · analyze_gc_log · analyze_heap_histo</div>
+      <div class="dim">  transport: STDIO · ready for MCP clients (cursor / claude / copilot)</div>
+      <div class="blue" style="margin-top:12px;">❯ waiting for tool call...</div>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="card card-bad">
+      <h3>✗ raw LLM on logs</h3>
+      <p>"the deadlock looks like it's caused by a database connection pool issue, you should probably increase max pool size"</p>
+      <div class="verdict">↑ hallucinated · unverifiable · wrong root cause</div>
+    </div>
+    <div class="card card-good">
+      <h3>✓ sleuths + LLM</h3>
+      <p>"found deadlock between OrderService.getPrice (thread-20) and LockManager.biz (thread-21). hot lock 0x..aaaa1 awaited by 2 threads."</p>
+      <div class="verdict">↑ deterministic · reproducible · evidence-backed</div>
+    </div>
+  </div>
+
+  <div class="tools">
+    <div class="tool c1">
+      <h4>analyze_thread_dump</h4>
+      <p>deadlocks · state distribution · hot locks · top frames</p>
+    </div>
+    <div class="tool c2">
+      <h4>parse_exception_log</h4>
+      <p>group by type · root-cause chain · count</p>
+    </div>
+    <div class="tool c3">
+      <h4>analyze_gc_log</h4>
+      <p>young/full counts · avg/max pause · trend</p>
+    </div>
+    <div class="tool c4">
+      <h4>analyze_heap_histo</h4>
+      <p>top classes by bytes · suspected leaks</p>
+    </div>
+  </div>
+
+  <div class="config">
+    <p>add to your MCP config:</p>
+    <pre>{
+  "mcpServers": {
+    "sleuths": {
+      "command": "npx",
+      "args": ["-y", "sleuths-mcp"]
+    }
+  }
+}</pre>
+  </div>
+
+  <footer>
+    <a href="https://github.com/threshbyte/sleuths">github.com/threshbyte/sleuths</a>·
+    <a href="https://www.npmjs.com/package/sleuths-mcp">npmjs.com/sleuths-mcp</a>·
+    MIT · @threshbyte
+  </footer>
+</div>
+</body>
+</html>

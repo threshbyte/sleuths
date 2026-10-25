@@ -2,7 +2,7 @@
 
 > A production-troubleshooting MCP server for AI agents. Turns thread dumps, GC logs and heap histograms into **deterministic** structured diagnostics (deadlocks, hot locks, bottleneck frames), so Cursor / Claude / Copilot pinpoint the problem directly — instead of hallucinating from raw logs.
 
-English | [中文](./README_ZH.md)
+**[▶ Live Demo](https://threshbyte.github.io/sleuths/)** · English · [中文](./README_ZH.md)
 
 ## Install
 
